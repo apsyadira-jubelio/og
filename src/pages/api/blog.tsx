@@ -4,6 +4,8 @@ import clsx from 'clsx';
 import { NextRequest } from 'next/server';
 import { CSSProperties } from 'react';
 
+import { apiURL } from '@/constant/env';
+
 export const inter400 = fetch(
   new URL('../../assets/Inter-Regular.ttf', import.meta.url)
 ).then((res) => res.arrayBuffer());
@@ -14,6 +16,7 @@ export const inter500 = fetch(
 
 export const config = {
   runtime: 'experimental-edge',
+  revalidate: 10,
 };
 
 export default async function handler(req: NextRequest) {
@@ -22,14 +25,24 @@ export default async function handler(req: NextRequest) {
 
   const { searchParams } = new URL(req.url);
 
+  const siteName = searchParams.get('siteName');
+  const description = searchParams.get('description');
+  const theme = searchParams.get('theme');
+  const logo = searchParams.get('logo');
   const templateTitle = searchParams.get('templateTitle');
+  const logoWidth = searchParams.get('logoWidth');
+  const logoHeight = searchParams.get('logoHeight');
   const banner = searchParams.get('banner');
-  const tags = searchParams.get('tags');
 
   const query = {
-    templateTitle: templateTitle ?? 'Blog Title',
-    banner,
-    tags: tags?.split(',') ?? [],
+    siteName: siteName ?? 'Site Name',
+    description: description ?? 'Description',
+    theme: theme ?? 'dark',
+    logo: logo ?? `${apiURL}/jpage.png`,
+    templateTitle,
+    logoWidth: logoWidth ? +logoWidth : 100,
+    logoHeight: logoHeight ? +logoHeight : undefined,
+    banner: banner ?? `${apiURL}/jpage.png`,
   };
 
   return new ImageResponse(
@@ -67,12 +80,34 @@ export default async function handler(req: NextRequest) {
               padding: '4rem 0 5rem 3rem',
             }}
           >
-            <h3
-              style={{ margin: 0 }}
-              tw={clsx('text-2xl font-normal text-gray-300')}
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginTop: '-32px',
+              }}
             >
-              theodorusclarence.com/blog
-            </h3>
+              <img
+                style={{
+                  width: 50,
+                  height: 30,
+                }}
+                src={`${apiURL}/icons/${
+                  query.theme === 'dark' ? 'light.png' : 'dark.png'
+                }`}
+                alt='Favicon'
+              />
+              <h3
+                tw={clsx(
+                  'ml-2 text-3xl font-bold',
+                  query.theme === 'dark' ? 'text-gray-300' : 'text-black'
+                )}
+              >
+                /{query.siteName}
+              </h3>
+            </div>
             <h1 tw={clsx('mt-0', 'text-4xl leading-tight font-normal')}>
               <span
                 style={
@@ -88,21 +123,9 @@ export default async function handler(req: NextRequest) {
                 {query.templateTitle}
               </span>
             </h1>
-            <div tw='flex'>
-              {query.tags.map((tag, i) => (
-                <div
-                  key={tag}
-                  tw={clsx([
-                    'inline-block rounded-md px-1.5 py-0.5 font-medium text-lg',
-                    'bg-gray-700 text-gray-200',
-                    i !== 0 && 'ml-2',
-                  ])}
-                >
-                  {tag}
-                </div>
-              ))}
-            </div>
-
+            {description && (
+              <p tw='mt-0 text-xl text-gray-300'>{description}</p>
+            )}
             <div
               style={{
                 display: 'flex',
@@ -114,7 +137,7 @@ export default async function handler(req: NextRequest) {
             >
               <img
                 tw='w-[80px] rounded-full'
-                src='https://res.cloudinary.com/theodorusclarence/image/upload/c_fill,g_auto:face,h_160,w_160/v1673957822/theodorusclarence/about/self-3_square_jtiwai.jpg'
+                src={query.logo}
                 alt='Photo of me'
               />
               <div
@@ -128,10 +151,10 @@ export default async function handler(req: NextRequest) {
                   style={{ margin: 0 }}
                   tw='font-medium text-[1.6rem] mt-0 text-white'
                 >
-                  Theodorus Clarence
+                  {templateTitle}
                 </p>
                 <p style={{ margin: 0 }} tw='text-xl mt-0 text-gray-300'>
-                  @th_clarence
+                  @{siteName}
                 </p>
               </div>
             </div>

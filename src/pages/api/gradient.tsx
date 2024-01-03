@@ -4,7 +4,7 @@ import clsx from 'clsx';
 import { NextRequest } from 'next/server';
 import { CSSProperties } from 'react';
 
-import { deploymentURL } from '@/constant/env';
+import { apiURL } from '@/constant/env';
 
 export const inter400 = fetch(
   new URL('../../assets/Inter-Regular.ttf', import.meta.url)
@@ -36,7 +36,7 @@ export default async function handler(req: NextRequest) {
     siteName: siteName ?? 'Site Name',
     description: description ?? 'Description',
     theme: theme ?? 'dark',
-    logo: logo ?? `${deploymentURL}/images/logo.jpg`,
+    logo: logo ?? `${apiURL}/jpage.png`,
     templateTitle,
     logoWidth: logoWidth ? +logoWidth : 100,
     logoHeight: logoHeight ? +logoHeight : undefined,

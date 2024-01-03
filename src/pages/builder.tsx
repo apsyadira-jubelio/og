@@ -8,7 +8,7 @@ import Input from '@/components/forms/Input';
 import SelectInput from '@/components/forms/SelectInput';
 import Seo from '@/components/Seo';
 
-import { deploymentURL } from '@/constant/env';
+import { apiURL, deploymentURL } from '@/constant/env';
 
 const queryKeys = [
   'siteName',
@@ -94,7 +94,7 @@ export default function BuildPage() {
                     <Input
                       id='logo'
                       label='Logo Links'
-                      helperText={`default: ${deploymentURL}/images/logo.jpg`}
+                      helperText={`default: ${apiURL}/jpage.png`}
                     />
                     <Input
                       id='banner'
