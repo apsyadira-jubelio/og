@@ -15,7 +15,7 @@ export const inter500 = fetch(
 ).then((res) => res.arrayBuffer());
 
 export const config = {
-  runtime: 'experimental-edge',
+  runtime: 'edge',
   revalidate: 10,
 };
 
