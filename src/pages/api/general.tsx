@@ -99,7 +99,7 @@ export default async function handler(req: NextRequest) {
 									width: 50,
 									height: 30,
 								}}
-								src={`${configApp.origin}/icons/${query.theme === 'dark' ? 'light.png' : 'dark.png'}`}
+								src={`${process.env.NEXT_PUBLIC_DOMAIN_URL}/icons/${query.theme === 'dark' ? 'light.png' : 'dark.png'}`}
 								alt='Favicon'
 							/>
 							<h4 tw={clsx('ml-2 text-3xl font-bold', query.theme === 'dark' ? 'text-white' : 'text-black')}>
